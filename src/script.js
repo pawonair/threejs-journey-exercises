@@ -1,7 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import GUI from 'lil-gui'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import GUI from 'lil-gui'
 
 /**
  * Base
@@ -18,23 +19,16 @@ const scene = new THREE.Scene()
 /**
  * Models
  */
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('/draco/') // for faster WA worker file
+
 const gltfLoader = new GLTFLoader()
+gltfLoader.setDRACOLoader(dracoLoader)
 
 gltfLoader.load(
-    // '/models/Duck/glTF/Duck.gltf',
-    // '/models/Duck/glTF-Binary/Duck.glb',
-    // '/models/Duck/glTF-Embedded/Duck.gltf',
-    '/models/FlightHelmet/glTF/FlightHelmet.gltf',
+    '/models/Duck/glTF-Draco/Duck.gltf',
     (gltf) => {
-        /*while (gltf.scene.children.length) {
-            scene.add(gltf.scene.children[0])
-        }*/
-
-        const children = [ ...gltf.scene.children ]
-
-        for (const child of children) {
-            scene.add(child)
-        }
+        scene.add(gltf.scene)
     }
 )
 
