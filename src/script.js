@@ -25,9 +25,17 @@ dracoLoader.setDecoderPath('/draco/') // for faster WA worker file
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
 
+let mixer = null
+
 gltfLoader.load(
-    '/models/Duck/glTF-Draco/Duck.gltf',
+    '/models/Fox/glTF/Fox.gltf',
     (gltf) => {
+        mixer = new THREE.AnimationMixer(gltf.scene)
+        const action = mixer.clipAction(gltf.animations[1])
+        
+        action.play()
+
+        gltf.scene.scale.set(0.025, 0.025, 0.025)
         scene.add(gltf.scene)
     }
 )
@@ -122,6 +130,11 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
+
+    // UPdate mixer
+    if (mixer !== null) {
+        mixer.update(deltaTime)
+    }
 
     // Update controls
     controls.update()
