@@ -1,15 +1,15 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import GUI from 'lil-gui'
-
-/**
- * Debug
- */
-const gui = new GUI()
 
 /**
  * Base
  */
+// Debug
+const gui = new GUI()
+
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
@@ -17,47 +17,33 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 /**
- * Textures
+ * Models
  */
-const textureLoader = new THREE.TextureLoader()
-const cubeTextureLoader = new THREE.CubeTextureLoader()
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('/draco/')
 
-const environmentMapTexture = cubeTextureLoader.load([
-    '/textures/environmentMaps/0/px.png',
-    '/textures/environmentMaps/0/nx.png',
-    '/textures/environmentMaps/0/py.png',
-    '/textures/environmentMaps/0/ny.png',
-    '/textures/environmentMaps/0/pz.png',
-    '/textures/environmentMaps/0/nz.png'
-])
+const gltfLoader = new GLTFLoader()
+gltfLoader.setDRACOLoader(dracoLoader)
 
-/**
- * Test sphere
- */
-const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 32, 32),
-    new THREE.MeshStandardMaterial({
-        metalness: 0.3,
-        roughness: 0.4,
-        envMap: environmentMapTexture,
-        envMapIntensity: 0.5
-    })
+let mixer = null
+
+gltfLoader.load(
+    '/models/hamburger.glb',
+    (gltf) =>
+    {
+        scene.add(gltf.scene)
+    }
 )
-sphere.castShadow = true
-sphere.position.y = 0.5
-scene.add(sphere)
 
 /**
  * Floor
  */
 const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(10, 10),
+    new THREE.PlaneGeometry(50, 50),
     new THREE.MeshStandardMaterial({
-        color: '#777777',
-        metalness: 0.3,
-        roughness: 0.4,
-        envMap: environmentMapTexture,
-        envMapIntensity: 0.5
+        color: '#444444',
+        metalness: 0,
+        roughness: 0.5
     })
 )
 floor.receiveShadow = true
@@ -67,10 +53,10 @@ scene.add(floor)
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 2.1)
+const ambientLight = new THREE.AmbientLight(0xffffff, 2.4)
 scene.add(ambientLight)
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8)
 directionalLight.castShadow = true
 directionalLight.shadow.mapSize.set(1024, 1024)
 directionalLight.shadow.camera.far = 15
@@ -109,11 +95,12 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(- 3, 3, 3)
+camera.position.set(- 8, 4, 8)
 scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
+controls.target.set(0, 1, 0)
 controls.enableDamping = true
 
 /**
@@ -131,10 +118,18 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 const clock = new THREE.Clock()
+let previousTime = 0
 
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+    const deltaTime = elapsedTime - previousTime
+    previousTime = elapsedTime
+
+    if(mixer)
+    {
+        mixer.update(deltaTime)
+    }
 
     // Update controls
     controls.update()
