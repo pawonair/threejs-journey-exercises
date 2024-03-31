@@ -10,6 +10,7 @@ import GUI from 'lil-gui'
 const gltfLoader = new GLTFLoader()
 const cubeTextureLoader = new THREE.CubeTextureLoader()
 const rgbeLoader = new RGBELoader()
+const textureLoader = new THREE.TextureLoader()
 
 /**
  * Base
@@ -39,7 +40,7 @@ const updateAllMaterials = () => {
  * Environment Map
  */
 scene.backgroundBlurriness = 0
-scene.backgroundIntensity = 5
+scene.backgroundIntensity = 1.5
 
 gui.add(scene, 'backgroundBlurriness').min(0).max(1).step(0.001)
 gui.add(scene, 'backgroundIntensity').min(0).max(10).step(0.001)
@@ -67,11 +68,20 @@ scene.environment = environmentMap
 scene.background = environmentMap*/
 
 // HDR (RGBE) equirectangular
-rgbeLoader.load('/environmentMaps/blender-2k.hdr', (environmentMap) => {
-    environmentMap.mapping = THREE.EquirectangularReflectionMapping
-    // scene.background = environmentMap
-    scene.environment = environmentMap
-})
+// rgbeLoader.load('/environmentMaps/blender-2k.hdr', (environmentMap) => {
+//     environmentMap.mapping = THREE.EquirectangularReflectionMapping
+//     // scene.background = environmentMap
+//     scene.environment = environmentMap
+// })
+
+// LDR equirectangular
+const environmentMap = textureLoader.load('/environmentMaps/blockadesLabsSkybox/anime_art_style_japan_streets_with_cherry_blossom_.jpg')
+
+environmentMap.mapping = THREE.EquirectangularReflectionMapping
+environmentMap.colorSpace = THREE.SRGBColorSpace
+
+scene.background = environmentMap
+scene.environment = environmentMap
 
 /**
  * Torus Knot
