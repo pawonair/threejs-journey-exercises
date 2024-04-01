@@ -76,9 +76,14 @@ gui.add(directionalLight.position, 'x').min(-10).max(10).step(0.001).name('Light
 
 // Shadows
 directionalLight.castShadow = true
+directionalLight.shadow.normalBias = 0.012
+directionalLight.shadow.bias = -0.004
 directionalLight.shadow.camera.far = 15
 directionalLight.shadow.mapSize.set(512, 512)
+
 gui.add(directionalLight, 'castShadow')
+gui.add(directionalLight.shadow, 'normalBias').min(-0.05).max(0.05).step(0.001)
+gui.add(directionalLight.shadow, 'bias').min(-0.05).max(0.05).step(0.001)
 
 // Helper
 // const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
@@ -92,11 +97,22 @@ directionalLight.target.updateWorldMatrix()
  * Models
  */
 // Helmet
-gltfLoader.load(
+/*gltfLoader.load(
     '/models/FlightHelmet/glTF/FlightHelmet.gltf',
     (gltf) =>
     {
         gltf.scene.scale.set(10, 10, 10)
+        scene.add(gltf.scene)
+
+        updateAllMaterials()
+    }
+)*/
+gltfLoader.load(
+    '/models/hamburger.glb',
+    (gltf) =>
+    {
+        gltf.scene.scale.set(0.4, 0.4, 0.4)
+        gltf.scene.position.set(0, 2.5, 0)
         scene.add(gltf.scene)
 
         updateAllMaterials()
