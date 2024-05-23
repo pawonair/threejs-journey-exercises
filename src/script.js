@@ -34,21 +34,35 @@ const waterMaterial = new THREE.ShaderMaterial({
     fragmentShader: waterFragmentShader,
     uniforms: {
         uTime: { value: 0 },
+        // Waves
         uBigWavesElevation: { value: 0.2 },
         uBigWavesFrequency: { value: new THREE.Vector2(4, 1.25) },
         uBigWavesSpeed: { value: 0.75 },
+        // Small Waves
+        uSmallWavesElevation: { value: 0.15 },
+        uSmallWavesFrequency: { value: 3 },
+        uSmallWavesSpeed: { value: 0.2 },
+        uSmallWavesIterations: { value: 4 },
+        // Colors
         uDepthColor: { value: new THREE.Color(debugObject.depthColor) },
         uSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },
-        uColorOffset: { value: 0.2 },
+        uColorOffset: { value: 0.175 },
         uColorMultiplier: { value: 3 }
     }
 })
 
 // Debug UI
+// Big waves
 gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('uBigWavesElevation')
 gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'x').min(0).max(10).step(0.001).name('uBigWavesFrequencyX')
 gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'y').min(0).max(10).step(0.001).name('uBigWavesFrequencyY')
 gui.add(waterMaterial.uniforms.uBigWavesSpeed, 'value').min(0).max(4).step(0.001).name('uBigWavesSpeed')
+// Small waves
+gui.add(waterMaterial.uniforms.uSmallWavesElevation, 'value').min(0).max(1).step(0.001).name('uSmallWavesElevation')
+gui.add(waterMaterial.uniforms.uSmallWavesFrequency, 'value').min(0).max(30).step(0.001).name('uSmallWavesFrequency')
+gui.add(waterMaterial.uniforms.uSmallWavesSpeed, 'value').min(0).max(5).step(0.001).name('uSmallWavesSpeed')
+gui.add(waterMaterial.uniforms.uSmallWavesIterations, 'value').min(0).max(4).step(1).name('uSmallWavesIterations')
+// Colors
 gui.addColor(debugObject, 'depthColor').name('depthColor').onChange(() => {
     waterMaterial.uniforms.uDepthColor.value.set(debugObject.depthColor)
 })
