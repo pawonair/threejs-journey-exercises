@@ -105,6 +105,7 @@ const smokeMaterial = new THREE.ShaderMaterial({
     },
     side: THREE.DoubleSide,
     transparent: true,
+    depthWrite: false,
     // wireframe: true
 })
 
