@@ -81,17 +81,25 @@ const texture = [
     textureLoader.load('./particles/7.png'),
     textureLoader.load('./particles/8.png'),
 ]
-const createFirework = (count, position, size, texture) => {
+const createFirework = (count, position, size, texture, radius, color) => {
     // Geometry
     const positionsArray = new Float32Array(count * 3)
     const sizesArray = new Float32Array(count)
 
     for(let i = 0; i < count; i++) {
         const i3 = i * 3
+        const spherical = new THREE.Spherical(
+            radius * (0.75 + Math.random() * 0.25),
+            Math.random() * Math.PI,
+            Math.random() * Math.PI * 2
+        )
+        const position = new THREE.Vector3()
 
-        positionsArray[i3] = Math.random() - 0.5
-        positionsArray[i3 + 1] = Math.random() - 0.5
-        positionsArray[i3 + 2] = Math.random() - 0.5
+        position.setFromSpherical(spherical)
+
+        positionsArray[i3]     = position.x
+        positionsArray[i3 + 1] = position.y
+        positionsArray[i3 + 2] = position.z
 
         sizesArray[i] = Math.random()
     }
@@ -109,7 +117,8 @@ const createFirework = (count, position, size, texture) => {
         uniforms: {
             uSize: new THREE.Uniform(size),
             uResolution: new THREE.Uniform(sizes.resolution),
-            uTexture: new THREE.Uniform(texture)
+            uTexture: new THREE.Uniform(texture),
+            uColor: new THREE.Uniform(color)
         },
         transparent: true,
         depthWrite: false,
@@ -123,10 +132,12 @@ const createFirework = (count, position, size, texture) => {
 }
 
 createFirework(
-    100,                // Count
-    new THREE.Vector3,  // Position
-    0.5,                // Size
-    texture[7],        // Texture
+    100,                       // Count
+    new THREE.Vector3,         // Position
+    0.5,                       // Size
+    texture[7],                // Texture
+    1,                         // Radius
+    new THREE.Color('#8affff') // Color
 )
 
 /**
