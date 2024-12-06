@@ -52,4 +52,8 @@ void main() {
     // Final size
     gl_PointSize = uSize * uResolution.y * aSize * sizeProgress * sizeTwinkling;
     gl_PointSize *= 1.0 / -viewPosition.z;
+
+    // For the issue where pixel remains after dispose(mainly for Windows)
+    if(gl_PointSize < 1.0)
+        gl_Position = vec4(9999.9);
 }
