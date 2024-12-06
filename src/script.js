@@ -71,9 +71,20 @@ renderer.setPixelRatio(sizes.pixelRatio)
 /**
  * Fireworks
  */
-const createFirework = (count, position, size) => {
+const texture = [
+    textureLoader.load('./particles/1.png'),
+    textureLoader.load('./particles/2.png'),
+    textureLoader.load('./particles/3.png'),
+    textureLoader.load('./particles/4.png'),
+    textureLoader.load('./particles/5.png'),
+    textureLoader.load('./particles/6.png'),
+    textureLoader.load('./particles/7.png'),
+    textureLoader.load('./particles/8.png'),
+]
+const createFirework = (count, position, size, texture) => {
     // Geometry
     const positionsArray = new Float32Array(count * 3)
+    const sizesArray = new Float32Array(count)
 
     for(let i = 0; i < count; i++) {
         const i3 = i * 3
@@ -81,19 +92,28 @@ const createFirework = (count, position, size) => {
         positionsArray[i3] = Math.random() - 0.5
         positionsArray[i3 + 1] = Math.random() - 0.5
         positionsArray[i3 + 2] = Math.random() - 0.5
+
+        sizesArray[i] = Math.random()
     }
 
     const geometry = new THREE.BufferGeometry()
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positionsArray, 3))
+    geometry.setAttribute('aSize', new THREE.Float32BufferAttribute(sizesArray, 1))
 
     // Material
+    texture.flipY = false
+
     const material = new THREE.ShaderMaterial({
         vertexShader: fireworkVertexShader,
         fragmentShader: fireworkFragmentShader,
         uniforms: {
             uSize: new THREE.Uniform(size),
-            uResolution: new THREE.Uniform(sizes.resolution)
-        }
+            uResolution: new THREE.Uniform(sizes.resolution),
+            uTexture: new THREE.Uniform(texture)
+        },
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
     })
 
     // Points
@@ -105,7 +125,8 @@ const createFirework = (count, position, size) => {
 createFirework(
     100,                // Count
     new THREE.Vector3,  // Position
-    0.5                  // Size
+    0.5,                // Size
+    texture[7],        // Texture
 )
 
 /**
