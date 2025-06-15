@@ -62,6 +62,16 @@ const material = new CustomShaderMaterial({
     wireframe: false
 })
 
+const depthMaterial = new CustomShaderMaterial({
+    // CustomShaderMaterial
+    baseMaterial: THREE.MeshDepthMaterial,
+    vertexShader: wobbleVertexShader,
+    silent: true,
+
+    // MeshDepthmaterial
+    depthPacking: THREE.RGBADepthPacking
+})
+
 // Tweaks
 gui.add(material, 'metalness', 0, 1, 0.001)
 gui.add(material, 'roughness', 0, 1, 0.001)
@@ -77,6 +87,7 @@ geometry.computeTangents()
 
 // Mesh
 const wobble = new THREE.Mesh(geometry, material)
+wobble.customDepthMaterial = depthMaterial
 wobble.receiveShadow = true
 wobble.castShadow = true
 scene.add(wobble)
