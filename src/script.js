@@ -3,7 +3,11 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js'
+import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import GUI from 'lil-gui'
+import wobbleVertexShader from './shaders/wobble/vertex.glsl'
+import wobbleFragmentShader from './shaders/wobble/fragment.glsl'
 
 /**
  * Base
@@ -40,7 +44,14 @@ rgbeLoader.load('./urban_alley_01_1k.hdr', (environmentMap) =>
  * Wobble
  */
 // Material
-const material = new THREE.MeshPhysicalMaterial({
+const material = new CustomShaderMaterial({
+    // CustomShaderMaterial
+    baseMaterial: THREE.MeshPhysicalMaterial,
+    vertexShader: wobbleVertexShader,
+    fragmentShader: wobbleFragmentShader,
+    silent: true,
+
+    // MeshPhysicalMaterial
     metalness: 0,
     roughness: 0.5,
     color: '#ffffff',
@@ -60,7 +71,9 @@ gui.add(material, 'thickness', 0, 10, 0.001)
 gui.addColor(material, 'color')
 
 // Geometry
-const geometry = new THREE.IcosahedronGeometry(2.5, 50)
+let geometry = new THREE.IcosahedronGeometry(2.5, 50)
+geometry = mergeVertices(geometry)
+geometry.computeTangents()
 
 // Mesh
 const wobble = new THREE.Mesh(geometry, material)
