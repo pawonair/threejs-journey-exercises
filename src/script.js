@@ -56,6 +56,16 @@ const uniforms = {
 gui.add(uniforms.uSliceStart, 'value', -Math.PI, Math.PI, 0.001).name('uSliceStart')
 gui.add(uniforms.uSliceArc, 'value', 0, Math.PI*2, 0.001).name('uSliceArc')
 
+const patchMap = {
+    csm_Slice: {
+        '#include <colorspace_fragment>': `
+            #include <colorspace_fragment>
+
+            if (!gl_FrontFacing) gl_FragColor = vec4(0.75, 0.15, 0.3, 1.0);
+        `
+    }
+}
+
 const material = new THREE.MeshStandardMaterial({
     metalness: 0.5,
     roughness: 0.25,
@@ -69,13 +79,15 @@ const slicedMaterial = new CustomShaderMaterial({
     vertexShader: slicedVerxtexShader,
     fragmentShader: slicedFragmentShader,
     uniforms,
+    patchMap,
     // silent: true,
     
     // MeshStandardMaterial
     metalness: 0.5,
     roughness: 0.25,
     envMapIntensity: 0.5,
-    color: '#858080'
+    color: '#858080',
+    side: THREE.DoubleSide
 })
 
 /* // Mesh
@@ -178,9 +190,9 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
-// renderer.toneMapping = THREE.ACESFilmicToneMapping
-// renderer.toneMappingExposure = 1
-renderer.outputColorSpace = THREE.LinearSRGBColorSpace
+renderer.toneMapping = THREE.ACESFilmicToneMapping
+renderer.toneMappingExposure = 1
+// renderer.outputColorSpace = THREE.LinearSRGBColorSpace
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(sizes.pixelRatio)
 
