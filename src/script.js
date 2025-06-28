@@ -48,17 +48,27 @@ rgbeLoader.load('./aerodynamics_workshop.hdr', (environmentMap) =>
 const geometry = new THREE.IcosahedronGeometry(2.5, 5) */
 
 // Material
+const uniforms = {
+    uSliceStart: new THREE.Uniform(1.750),
+    uSliceArc: new THREE.Uniform(1.250),
+}
+
+gui.add(uniforms.uSliceStart, 'value', -Math.PI, Math.PI, 0.001).name('uSliceStart')
+gui.add(uniforms.uSliceArc, 'value', 0, Math.PI*2, 0.001).name('uSliceArc')
+
 const material = new THREE.MeshStandardMaterial({
     metalness: 0.5,
     roughness: 0.25,
     envMapIntensity: 0.5,
     color: '#858080'
 })
+
 const slicedMaterial = new CustomShaderMaterial({
     // CSM
     baseMaterial: THREE.MeshStandardMaterial,
     vertexShader: slicedVerxtexShader,
     fragmentShader: slicedFragmentShader,
+    uniforms,
     // silent: true,
     
     // MeshStandardMaterial
@@ -168,8 +178,9 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
-renderer.toneMapping = THREE.ACESFilmicToneMapping
-renderer.toneMappingExposure = 1
+// renderer.toneMapping = THREE.ACESFilmicToneMapping
+// renderer.toneMappingExposure = 1
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(sizes.pixelRatio)
 
