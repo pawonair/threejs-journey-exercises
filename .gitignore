@@ -130,3 +130,5 @@ dist
 .pnp.*
 .qodo.*
 .qodo
+
+.DS_Store
