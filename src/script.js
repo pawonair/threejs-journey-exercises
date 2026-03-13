@@ -47,6 +47,7 @@ geometry.rotateX(- Math.PI * 0.5)
 
 // Material
 const uniforms = {
+    uTime: new THREE.Uniform(0),
     uPositionFrequency: new THREE.Uniform(0.2),
     uStrength: new THREE.Uniform(2.0),
     uWarpFrequency: new THREE.Uniform(5),
@@ -71,8 +72,19 @@ const material = new CustomShaderMaterial({
     color: '#85d534'
 })
 
+const depthMaterial = new CustomShaderMaterial({
+    // CSM
+    baseMaterial: THREE.MeshDepthMaterial,
+    vertexShader: terrainVertexShader,
+    uniforms: uniforms,
+
+    // MeshDepthMaterial
+    depthPacking: THREE.RGBADepthPacking
+})
+
 // Mesh
 const terrain = new THREE.Mesh(geometry, material)
+terrain.customDepthMaterial = depthMaterial
 terrain.receiveShadow = true
 terrain.castShadow = true
 scene.add(terrain)
@@ -173,6 +185,9 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // Update Uniforms
+    uniforms.uTime.value = elapsedTime
 
     // Update controls
     controls.update()
