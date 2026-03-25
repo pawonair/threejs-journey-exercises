@@ -108,6 +108,10 @@ window.addEventListener('resize', () =>
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    // Update effect composer
+    effectComposer.setSize(sizes.width, sizes.height)
+    effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
 /**
@@ -152,11 +156,12 @@ effectComposer.addPass(dotScreenPass)
 
 const glitchPass = new GlitchPass()
 glitchPass.goWild = false
-glitchPass.enabled = false
+glitchPass.enabled = true
 effectComposer.addPass(glitchPass)
 
 // RGB Shift Pass
 const rgbShiftPass = new ShaderPass(RGBShiftShader)
+rgbShiftPass.enabled = false
 effectComposer.addPass(rgbShiftPass)
 
 // Gamma Correction Pass
