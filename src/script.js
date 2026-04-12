@@ -65,7 +65,8 @@ controls.enableDamping = true
  */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
-    powerPreference: 'high-performance',
+    // // enable GPU usage for low frame-rates
+    // powerPreference: 'high-performance',
     antialias: true
 })
 renderer.shadowMap.enabled = true
@@ -83,7 +84,7 @@ const cube = new THREE.Mesh(
 cube.castShadow = true
 cube.receiveShadow = true
 cube.position.set(- 5, 0, 0)
-scene.add(cube)
+// scene.add(cube)
 
 const torusKnot = new THREE.Mesh(
     new THREE.TorusKnotGeometry(1, 0.4, 128, 32),
@@ -91,7 +92,7 @@ const torusKnot = new THREE.Mesh(
 )
 torusKnot.castShadow = true
 torusKnot.receiveShadow = true
-scene.add(torusKnot)
+// scene.add(torusKnot)
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(1, 32, 32),
@@ -100,7 +101,7 @@ const sphere = new THREE.Mesh(
 sphere.position.set(5, 0, 0)
 sphere.castShadow = true
 sphere.receiveShadow = true
-scene.add(sphere)
+// scene.add(sphere)
 
 const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(10, 10),
@@ -110,18 +111,18 @@ floor.position.set(0, - 2, 0)
 floor.rotation.x = - Math.PI * 0.5
 floor.castShadow = true
 floor.receiveShadow = true
-scene.add(floor)
+// scene.add(floor)
 
 /**
  * Lights
  */
-const directionalLight = new THREE.DirectionalLight('#ffffff', 3)
-directionalLight.castShadow = true
-directionalLight.shadow.mapSize.set(1024, 1024)
-directionalLight.shadow.camera.far = 15
-directionalLight.shadow.normalBias = 0.05
-directionalLight.position.set(0.25, 3, 2.25)
-scene.add(directionalLight)
+// const directionalLight = new THREE.DirectionalLight('#ffffff', 3)
+// directionalLight.castShadow = true
+// directionalLight.shadow.mapSize.set(1024, 1024)
+// directionalLight.shadow.camera.far = 15
+// directionalLight.shadow.normalBias = 0.05
+// directionalLight.position.set(0.25, 3, 2.25)
+// scene.add(directionalLight)
 
 /**
  * Animate
@@ -164,39 +165,39 @@ tick()
 // cube.geometry.dispose()
 // cube.material.dispose()
 
-// Tip 10
-// Avoid Three.js lights
-// Use baked/cheap lights
-directionalLight.shadow.camera.top = 3
-directionalLight.shadow.camera.right = 6
-directionalLight.shadow.camera.left = - 6
-directionalLight.shadow.camera.bottom = - 3
-directionalLight.shadow.camera.far = 10
-directionalLight.shadow.mapSize.set(1024, 1024)
+// // Tip 10
+// // Avoid Three.js lights
+// // Use baked/cheap lights
+// directionalLight.shadow.camera.top = 3
+// directionalLight.shadow.camera.right = 6
+// directionalLight.shadow.camera.left = - 6
+// directionalLight.shadow.camera.bottom = - 3
+// directionalLight.shadow.camera.far = 10
+// directionalLight.shadow.mapSize.set(1024, 1024)
 
-// Use cameraHelper to optimize mapSize for light and shadows
-const cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
-scene.add(cameraHelper)
+// // Use cameraHelper to optimize mapSize for light and shadows
+// const cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+// scene.add(cameraHelper)
 
-// Tip 11
-// Avoid Three.js shadows
-// Use baked shadows
-cube.castShadow = true
-cube.receiveShadow = false
+// // Tip 11
+// // Avoid Three.js shadows
+// // Use baked shadows
+// cube.castShadow = true
+// cube.receiveShadow = false
 
-torusKnot.castShadow = true
-torusKnot.receiveShadow = false
+// torusKnot.castShadow = true
+// torusKnot.receiveShadow = false
 
-sphere.castShadow = true
-sphere.receiveShadow = false
+// sphere.castShadow = true
+// sphere.receiveShadow = false
 
-floor.castShadow = false
-floor.receiveShadow = true
+// floor.castShadow = false
+// floor.receiveShadow = true
 
-// Tip 12
-// Deactivate shadowMaps auto-update
-renderer.shadowMap.autoUpdate = false
-renderer.shadowMap.needsUpdate = true
+// // Tip 12
+// // Deactivate shadowMaps auto-update
+// renderer.shadowMap.autoUpdate = false
+// renderer.shadowMap.needsUpdate = true
 
 // // Tip 18
 // for(let i = 0; i < 50; i++)
@@ -259,95 +260,90 @@ renderer.shadowMap.needsUpdate = true
 //     scene.add(mesh)
 // }
 
-// Tip 22
-// Can control each cubes with Matrices
-const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
-const material = new THREE.MeshNormalMaterial()
+// // Tip 22
+// // Can control each cubes with Matrices
+// const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+// const material = new THREE.MeshNormalMaterial()
 
-const mesh = new THREE.InstancedMesh(geometry, material, 50)
-scene.add(mesh)
+// const mesh = new THREE.InstancedMesh(geometry, material, 50)
+// scene.add(mesh)
     
-for(let i = 0; i < 50; i++)
-{
-    const position = new THREE.Vector3(
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10
-    )
+// for(let i = 0; i < 50; i++)
+// {
+//     const position = new THREE.Vector3(
+//         (Math.random() - 0.5) * 10,
+//         (Math.random() - 0.5) * 10,
+//         (Math.random() - 0.5) * 10
+//     )
 
-    const quaternion = new THREE.Quaternion()
-    quaternion.setFromEuler(new THREE.Euler(
-        (Math.random() - 0.5) * Math.PI * 2,
-        (Math.random() - 0.5) * Math.PI * 2,
-        0
-    ))
+//     const quaternion = new THREE.Quaternion()
+//     quaternion.setFromEuler(new THREE.Euler(
+//         (Math.random() - 0.5) * Math.PI * 2,
+//         (Math.random() - 0.5) * Math.PI * 2,
+//         0
+//     ))
 
-    const matrix = new THREE.Matrix4()
-    matrix.makeRotationFromQuaternion(quaternion)
-    matrix.setPosition(position)
-    mesh.setMatrixAt(i, matrix)
-}
+//     const matrix = new THREE.Matrix4()
+//     matrix.makeRotationFromQuaternion(quaternion)
+//     matrix.setPosition(position)
+//     mesh.setMatrixAt(i, matrix)
+// }
 
-// // Tip 29
-// renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+// Tip 29
+// Optimize to the device display
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-// // Tip 31, 32, 34 and 35
-// const shaderGeometry = new THREE.PlaneGeometry(10, 10, 256, 256)
+// Tip 31, 32, 34 and 35
+const shaderGeometry = new THREE.PlaneGeometry(10, 10, 256, 256)
 
-// const shaderMaterial = new THREE.ShaderMaterial({
-//     uniforms:
-//     {
-//         uDisplacementTexture: { value: displacementTexture },
-//         uDisplacementStrength: { value: 1.5 }
-//     },
-//     vertexShader: `
-//         uniform sampler2D uDisplacementTexture;
-//         uniform float uDisplacementStrength;
+const shaderMaterial = new THREE.ShaderMaterial({
+    uniforms:
+    {
+        uDisplacementTexture: { value: displacementTexture },
+        // uDisplacementStrength: { value: 1.5 }
+    },
+    defines:
+    {
+        DISPLACEMENT_STRENGTH: 1.5,
+    },
+    vertexShader: `
+        #define uDisplacementStrength 1.5
+        uniform sampler2D uDisplacementTexture;
+        // uniform float uDisplacementStrength;
 
-//         varying vec2 vUv;
+        varying vec2 vUv;
+        varying vec3 vColor;
 
-//         void main()
-//         {
-//             vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+        void main()
+        {
+            // Position
+            vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+            float elevation = texture2D(uDisplacementTexture, uv).r;
+            modelPosition.y += max(elevation, 0.5) * DISPLACEMENT_STRENGTH;
+            gl_Position = projectionMatrix * viewMatrix * modelPosition;
 
-//             float elevation = texture2D(uDisplacementTexture, uv).r;
-//             if(elevation < 0.5)
-//             {
-//                 elevation = 0.5;
-//             }
+            // Color
+            float colorElevation = max(elevation, 0.25);
+            vec3 color = mix(vec3(1.0, 0.1, 0.1), vec3(0.1, 0.0, 0.5), colorElevation);
 
-//             modelPosition.y += elevation * uDisplacementStrength;
+            // Varying
+            vUv = uv;
+            vColor = color;
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D uDisplacementTexture;
 
-//             gl_Position = projectionMatrix * viewMatrix * modelPosition;
+        varying vec2 vUv;
+        varying vec3 vColor;
 
-//             vUv = uv;
-//         }
-//     `,
-//     fragmentShader: `
-//         uniform sampler2D uDisplacementTexture;
+        void main()
+        {
+            gl_FragColor = vec4(vColor, 1.0);
+        }
+    `
+})
 
-//         varying vec2 vUv;
-
-//         void main()
-//         {
-//             float elevation = texture2D(uDisplacementTexture, vUv).r;
-//             if(elevation < 0.25)
-//             {
-//                 elevation = 0.25;
-//             }
-
-//             vec3 depthColor = vec3(1.0, 0.1, 0.1);
-//             vec3 surfaceColor = vec3(0.1, 0.0, 0.5);
-//             vec3 finalColor = vec3(0.0);
-//             finalColor.r += depthColor.r + (surfaceColor.r - depthColor.r) * elevation;
-//             finalColor.g += depthColor.g + (surfaceColor.g - depthColor.g) * elevation;
-//             finalColor.b += depthColor.b + (surfaceColor.b - depthColor.b) * elevation;
-
-//             gl_FragColor = vec4(finalColor, 1.0);
-//         }
-//     `
-// })
-
-// const shaderMesh = new THREE.Mesh(shaderGeometry, shaderMaterial)
-// shaderMesh.rotation.x = - Math.PI * 0.5
-// scene.add(shaderMesh)
+const shaderMesh = new THREE.Mesh(shaderGeometry, shaderMaterial)
+shaderMesh.rotation.x = - Math.PI * 0.5
+scene.add(shaderMesh)
